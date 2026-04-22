@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { StreamData, streamText } from "ai";
-import { buildRefineSystemPrompt } from "@/lib/prompts";
+import { buildRefineSystemPrompt, buildRefineUserPrompt } from "@/lib/prompts";
 import { loadModels } from "@/lib/models";
 import { getUserContext, checkModelAvailability, getApiKeyToUse, getApiKeyForModel } from "@/lib/api-helpers";
 import { createOpenRouterClient } from "@/lib/openrouter";
@@ -122,17 +122,21 @@ export async function POST(request: Request) {
   // If user has own key with OpenRouter provider, use that; otherwise use system key
   const openrouterClient = createOpenRouterClient(openrouterKey);
   const systemPrompt = await buildRefineSystemPrompt(
-    summary,
     userLanguage,
     customGuidelines,
     summaryStyleFlags,
     summaryStyleFlagsVersion
   );
+  const summaryPrompt = buildRefineUserPrompt(summary, userLanguage);
   const data = new StreamData();
   const start = Date.now();
   const result = await streamText({
     model: openrouterClient(modelId) as any,
-    messages: [{ role: "system", content: systemPrompt }, ...messages],
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: summaryPrompt },
+      ...messages,
+    ],
     onFinish: (event) => {
       const usage = buildUsageStats(event.usage, Date.now() - start, model, "refine");
       if (usage) {

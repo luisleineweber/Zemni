@@ -164,7 +164,7 @@ export function validateMessagesArray(messages: unknown[]): { valid: boolean; er
     }
 
     // Validate role is valid
-    const validRoles = ["user", "assistant", "system"];
+    const validRoles = ["user", "assistant"];
     if (!validRoles.includes(msgObj.role)) {
       return {
         valid: false,
