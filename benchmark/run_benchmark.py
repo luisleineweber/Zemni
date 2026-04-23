@@ -929,7 +929,7 @@ async def run_benchmark(
                 json.dump(merged_results, f, indent=2, ensure_ascii=False)
             # Atomic rename (works on Unix and Windows)
             temp_path.replace(results_path)
-        except Exception as e:
+        except Exception:
             # Clean up temp file on error
             if temp_path.exists():
                 temp_path.unlink()

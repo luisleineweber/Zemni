@@ -3,7 +3,7 @@ import json
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Optional, List
 
 
 LOG_DIR = Path(__file__).parent.parent / "results" / "logs"

@@ -283,7 +283,7 @@ async def generate_test_cases(
     successful = sum(1 for tc in test_cases if not tc.get("error") and tc.get("text"))
     print(f"\n✓ Generated {successful}/{count} test cases")
     print(f"  Saved to: {output_path}")
-    print(f"  Note: Generated text is preserved for future test case reuse")
+    print("  Note: Generated text is preserved for future test case reuse")
 
     balance_report = validate_balance(test_cases, topics, formats, min_per_cell=min_per_cell)
     print("\nBalance validation:")

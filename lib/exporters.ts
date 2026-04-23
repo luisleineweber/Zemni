@@ -1,5 +1,10 @@
 import type { Flashcard, QuizQuestion } from "@/types";
 
+export type TextExportFile = {
+  fileName: string;
+  content: string;
+};
+
 const toBaseName = (fileName: string): string => {
   const trimmed = (fileName || "").trim();
   if (!trimmed) return "document";
@@ -12,7 +17,30 @@ const tsvEscape = (value: string): string => {
     .replace(/\r?\n/g, "<br>");
 };
 
-export const flashcardsToTsv = (cards: Flashcard[], fileName: string): { fileName: string; content: string } => {
+const normalizeLineEndings = (value: string): string => {
+  return String(value ?? "").replace(/\r\n?/g, "\n");
+};
+
+const csvEscape = (value: string, lineBreakMode: "html" | "space"): string => {
+  let normalized = normalizeLineEndings(value);
+
+  if (lineBreakMode === "html") {
+    normalized = normalized.replace(/\n/g, "<br>");
+  } else {
+    normalized = normalized.replace(/\s*\n\s*/g, " ");
+  }
+
+  return `"${normalized.replace(/"/g, "\"\"")}"`;
+};
+
+const giftEscape = (value: string): string => {
+  return normalizeLineEndings(value)
+    .replace(/\s*\n\s*/g, " ")
+    .replace(/\\/g, "\\\\")
+    .replace(/([~=#{}:])/g, "\\$1");
+};
+
+export const flashcardsToTsv = (cards: Flashcard[], fileName: string): TextExportFile => {
   const base = toBaseName(fileName);
   const lines = cards.map((c) => {
     const front = tsvEscape(c.front);
@@ -23,6 +51,18 @@ export const flashcardsToTsv = (cards: Flashcard[], fileName: string): { fileNam
   return { fileName: `${base}-flashcards.tsv`, content: lines.join("\n") + "\n" };
 };
 
+export const flashcardsToAnkiCsv = (cards: Flashcard[], fileName: string): TextExportFile => {
+  const base = toBaseName(fileName);
+  const lines = cards.map((card) => `${csvEscape(card.front, "html")},${csvEscape(card.back, "html")}`);
+  return { fileName: `${base}-flashcards-anki.csv`, content: lines.join("\n") + "\n" };
+};
+
+export const flashcardsToQuizletCsv = (cards: Flashcard[], fileName: string): TextExportFile => {
+  const base = toBaseName(fileName);
+  const lines = cards.map((card) => `${csvEscape(card.front, "space")},${csvEscape(card.back, "space")}`);
+  return { fileName: `${base}-flashcards-quizlet.csv`, content: lines.join("\n") + "\n" };
+};
+
 const lettersFor = (count: number): string[] => {
   const out: string[] = [];
   for (let i = 0; i < count; i++) {
@@ -31,7 +71,7 @@ const lettersFor = (count: number): string[] => {
   return out;
 };
 
-export const quizToMarkdown = (questions: QuizQuestion[], fileName: string): { fileName: string; content: string } => {
+export const quizToMarkdown = (questions: QuizQuestion[], fileName: string): TextExportFile => {
   const base = toBaseName(fileName);
   const title = fileName ? `Quiz - ${fileName}` : "Quiz";
   let md = `# ${title}\n\n`;
@@ -56,4 +96,23 @@ export const quizToMarkdown = (questions: QuizQuestion[], fileName: string): { f
   });
 
   return { fileName: `${base}-quiz.md`, content: md.trim() + "\n" };
+};
+
+export const quizToGift = (questions: QuizQuestion[], fileName: string): TextExportFile => {
+  const base = toBaseName(fileName);
+  if (!questions.length) {
+    return { fileName: `${base}-quiz.gift.txt`, content: "" };
+  }
+
+  const content = questions
+    .map((question, index) => {
+      const prompt = giftEscape(question.question);
+      const answers = question.options
+        .map((option, optionIndex) => `${optionIndex === question.correctIndex ? "=" : "~"}${giftEscape(option)}`)
+        .join(" ");
+      return `::Q${index + 1}::${prompt} { ${answers} }`;
+    })
+    .join("\n\n");
+
+  return { fileName: `${base}-quiz.gift.txt`, content: `${content}\n` };
 };

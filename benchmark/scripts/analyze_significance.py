@@ -25,7 +25,7 @@ import statistics
 from pathlib import Path
 from typing import Dict, Any, List, Tuple, Optional
 from collections import defaultdict
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 
 
 @dataclass
@@ -533,7 +533,7 @@ def main():
     # Significant comparisons
     sig_comps = [c for c in comparisons_quality if c.is_significant]
     if sig_comps:
-        print(f"\nSignificant Improvements (p < 0.05, |d| >= 0.2):")
+        print("\nSignificant Improvements (p < 0.05, |d| >= 0.2):")
         for c in sig_comps[:5]:
             direction = ">" if c.mean_diff > 0 else "<"
             print(f"  {c.model_a} {direction} {c.model_b}: diff={c.mean_diff:+.2f}, d={c.cohens_d:.2f}")

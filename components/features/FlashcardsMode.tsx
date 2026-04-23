@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { Flashcard, OutputEntry } from "@/types";
 import { downloadTextFile } from "@/lib/download";
 import { flashcardsToMarkdown } from "@/lib/output-previews";
-import { flashcardsToTsv } from "@/lib/exporters";
+import { flashcardsToAnkiCsv, flashcardsToQuizletCsv, flashcardsToTsv } from "@/lib/exporters";
 import { ExportMenu } from "@/components/ui";
 
 /**
@@ -173,6 +173,22 @@ export function FlashcardsMode({ extractedText, fileName, output, showKeyboardHi
     downloadTextFile(exportName, content, "text/tab-separated-values;charset=utf-8");
   };
 
+  /**
+   * Export flashcards as an Anki-friendly CSV file.
+   */
+  const handleExportAnkiCsv = () => {
+    const { fileName: exportName, content } = flashcardsToAnkiCsv(cards, fileName);
+    downloadTextFile(exportName, content, "text/csv;charset=utf-8");
+  };
+
+  /**
+   * Export flashcards as a Quizlet-friendly CSV file.
+   */
+  const handleExportQuizletCsv = () => {
+    const { fileName: exportName, content } = flashcardsToQuizletCsv(cards, fileName);
+    downloadTextFile(exportName, content, "text/csv;charset=utf-8");
+  };
+
   return (
     <div className="flashcards-view">
       {output.isCached && (
@@ -190,7 +206,9 @@ export function FlashcardsMode({ extractedText, fileName, output, showKeyboardHi
             disabled={!cards.length}
             options={[
               { id: "md", label: "Markdown (.md)", onSelect: handleExportMarkdown },
-              { id: "tsv", label: "TSV (Anki/Spreadsheet)", onSelect: handleExportTsv }
+              { id: "tsv", label: "TSV (Raw/Spreadsheet)", onSelect: handleExportTsv },
+              { id: "anki-csv", label: "Anki CSV (.csv)", onSelect: handleExportAnkiCsv },
+              { id: "quizlet-csv", label: "Quizlet CSV (.csv)", onSelect: handleExportQuizletCsv }
             ]}
           />
         </div>

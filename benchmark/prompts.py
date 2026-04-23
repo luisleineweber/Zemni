@@ -1,5 +1,4 @@
 """Prompt building logic ported from TypeScript."""
-import os
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 

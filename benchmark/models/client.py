@@ -1,6 +1,5 @@
 """OpenRouter API client with async support, model availability checks, and cost tracking."""
 import asyncio
-import json
 import os
 import time
 from pathlib import Path
@@ -54,7 +53,7 @@ class ModelClient:
                 try:
                     error_data = response.json()
                     print(f"[WARN] Model {model_id} unavailable: {error_data.get('error', {}).get('message', f'Status {response.status_code}')}")
-                except:
+                except ValueError:
                     print(f"[WARN] Model {model_id} unavailable: Status {response.status_code}")
             return response.status_code == 200
         except Exception as e:
@@ -247,5 +246,5 @@ class ModelClient:
     async def __aenter__(self):
         return self
     
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
+    async def __aexit__(self, _exc_type, _exc_val, _exc_tb):
         await self.close()

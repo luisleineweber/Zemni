@@ -1,5 +1,4 @@
 """Tests for format_checker evaluator."""
-import pytest
 from evaluators.format_checker import (
     evaluate_reliability,
     check_markdown_structure,

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { OutputEntry, QuizQuestion, Status } from "@/types";
 import { downloadTextFile } from "@/lib/download";
-import { quizToMarkdown } from "@/lib/exporters";
+import { quizToGift, quizToMarkdown } from "@/lib/exporters";
 import { getQuizAnswerState } from "@/lib/utils/quiz-state";
 import { ConfirmModal, ExportMenu } from "@/components/ui";
 
@@ -250,6 +250,14 @@ export function QuizMode({
     downloadTextFile(`${base}-quiz.json`, JSON.stringify({ questions: quiz }, null, 2) + "\n", "application/json;charset=utf-8");
   };
 
+  /**
+   * Export quiz questions as a GIFT file for Moodle/LMS imports.
+   */
+  const handleExportGift = () => {
+    const { fileName: exportName, content } = quizToGift(quiz, fileName);
+    downloadTextFile(exportName, content, "text/plain;charset=utf-8");
+  };
+
   return (
     <div className="quiz-view">
       {output.isCached && (
@@ -283,7 +291,8 @@ export function QuizMode({
             disabled={!quiz.length}
             options={[
               { id: "md", label: "Markdown (.md)", onSelect: handleExportMarkdown },
-              { id: "json", label: "JSON (.json)", onSelect: handleExportJson }
+              { id: "json", label: "JSON (.json)", onSelect: handleExportJson },
+              { id: "gift", label: "GIFT (.gift.txt)", onSelect: handleExportGift }
             ]}
           />
         </div>

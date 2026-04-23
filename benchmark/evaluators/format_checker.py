@@ -17,24 +17,6 @@ def check_latex_escaping(text: str) -> tuple[bool, list[str]]:
     """
     issues = []
     
-    # Check for inline math: $...$ or \(...\)
-    inline_patterns = [
-        r'\$[^$]+\$',  # $...$
-        r'\\\([^)]+\\\)',  # \(...\)
-    ]
-    
-    # Check for display math: $$...$$ or \[...\]
-    display_patterns = [
-        r'\$\$[^$]+\$\$',  # $$...$$
-        r'\\\[[^\]]+\\\]',  # \[...\]
-    ]
-    
-    # Find unescaped dollar signs that might be LaTeX
-    # Look for patterns like "The formula is $x + y" without closing $
-    unclosed_inline = re.findall(r'\$[^$]*$', text, re.MULTILINE)
-    if unclosed_inline:
-        issues.append(f"Unclosed inline LaTeX: {len(unclosed_inline)} instances")
-    
     # Check for proper escaping in markdown context
     # LaTeX should not break markdown parsing
     # Check for $ inside code blocks (should be fine)

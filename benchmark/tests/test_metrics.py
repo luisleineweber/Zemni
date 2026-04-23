@@ -1,5 +1,4 @@
 """Tests for metrics calculation."""
-import pytest
 from evaluators.metrics import (
     calculate_percentiles,
     aggregate_model_metrics,
