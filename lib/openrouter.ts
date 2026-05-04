@@ -45,5 +45,6 @@ export function createOpenRouterNativeClient(apiKey?: string) {
   });
 }
 
-// Default export for backward compatibility
-export const openrouter = createOpenRouterClient();
+// Backward-compatible lazy client. Do not create the client at module import
+// time, otherwise routes crash before they can return a clear missing-key error.
+export const openrouter = (modelId: string) => createOpenRouterClient()(modelId);
