@@ -4,6 +4,7 @@ import { useAppState } from "@/hooks";
 import { ModelSelector } from "@/components/ui";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { MODEL_DESCRIPTIONS } from "@/lib/model-routing";
 import { useState, useMemo } from "react";
 
 /**
@@ -73,35 +74,7 @@ function ModelIcon({ modelId }: { modelId: string }) {
  * Return a short human-readable description for a model id.
  */
 function getModelDescription(modelId: string): string {
-  const descriptions: Record<string, string> = {
-    "openai/gpt-5.4": "Newest flagship GPT model with the strongest reasoning and highest-quality output",
-    "openai/gpt-5.4-mini": "A faster lower-cost GPT-5.4 variant suited to high-throughput study generations",
-    "openai/gpt-5.4-nano": "An ultra-fast GPT-5.4 family fallback for extraction, ranking, and lightweight tasks",
-    "openai/gpt-5.2-chat": "Fast responses with GPT-5.2 capabilities for rapid prototyping",
-    "openai/gpt-5.2": "Previous flagship GPT model kept for compatibility",
-    "openai/gpt-5.1": "Balanced performance and cost for most generation tasks",
-    "openai/gpt-5-mini": "Efficient and cost-effective model for quick generations",
-    "openai/gpt-5-nano": "Ultra-lightweight model optimized for speed and minimal cost",
-    "openai/gpt-oss-120b:free": "Open-source 120B parameter model available at no cost",
-    "openai/gpt-oss-120b": "Powerful open-source model with advanced reasoning capabilities",
-    "google/gemini-3-flash-preview": "Fast and efficient multimodal model from Google",
-    "google/gemini-3-pro-preview": "Advanced reasoning with superior comprehension and output quality",
-    "anthropic/claude-sonnet-4.5": "Claude's balanced model for thoughtful analysis",
-    "anthropic/claude-opus-4.5": "Claude's most capable model for complex reasoning",
-    "mistralai/mistral-small-2603": "A compact Mistral model with a strong price-performance profile for study workloads",
-    "x-ai/grok-4.1-fast": "High-speed model with real-time information capabilities",
-    "nvidia/nemotron-3-super-120b-a12b:free": "A free experimental large model for broad comparisons and fallback testing",
-    "moonshotai/kimi-k2-thinking": "Specialized model with extended context understanding",
-    "moonshotai/kimi-k2.5": "Enhanced reasoning and longer context window",
-    "deepseek/deepseek-v3.2": "Cost-efficient model with strong coding capabilities",
-    "minimax/minimax-m2.7": "A newer Minimax release positioned as a stronger general-purpose budget model",
-    "z-ai/glm-4.7": "Versatile model with strong multilingual support",
-    "z-ai/glm-5": "Next-generation GLM model with improved quality and reasoning",
-    "z-ai/glm-4.7-flash": "Rapid response model optimized for quick answers",
-    "arcee-ai/trinity-large-preview:free": "Community model available at no cost",
-  };
-  
-  return descriptions[modelId] || "General-purpose language model for content generation";
+  return MODEL_DESCRIPTIONS[modelId] || "General-purpose language model for content generation";
 }
 
 /**

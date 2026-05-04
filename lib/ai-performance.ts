@@ -1,4 +1,5 @@
 import type { LanguageModelUsage } from "ai";
+import { MODEL_IDS } from "./model-routing";
 
 export type TimeoutController = {
   signal: AbortSignal;
@@ -84,20 +85,20 @@ export const getEstimatedCompletionTime = (
 
   // Fallback to model-specific base estimates (in seconds)
   const baseEstimates: Record<string, number> = {
-    "openai/gpt-oss-120b": 90,
-    "openai/gpt-oss-20b": 60,
-    "anthropic/claude-opus-4.5": 75,
-    "anthropic/claude-sonnet-4.5": 45,
-    "openai/gpt-5.4": 35,
-    "openai/gpt-5.4-mini": 18,
-    "openai/gpt-5.4-nano": 10,
-    "openai/gpt-5.2": 30,
-    "openai/gpt-5.1": 25,
-    "openai/gpt-5-mini": 15,
-    "mistralai/mistral-small-2603": 14,
-    "minimax/minimax-m2.7": 20,
-    "nvidia/nemotron-3-super-120b-a12b:free": 95,
-    "deepseek/deepseek-v3.2": 20,
+    [MODEL_IDS.GPT_OSS_120B]: 90,
+    [MODEL_IDS.GPT_OSS_20B]: 60,
+    [MODEL_IDS.CLAUDE_OPUS_4_5]: 75,
+    [MODEL_IDS.CLAUDE_SONNET_4_5]: 45,
+    [MODEL_IDS.GPT_5_4]: 35,
+    [MODEL_IDS.GPT_5_4_MINI]: 18,
+    [MODEL_IDS.GPT_5_4_NANO]: 10,
+    [MODEL_IDS.GPT_5_2]: 30,
+    [MODEL_IDS.GPT_5_1]: 25,
+    [MODEL_IDS.GPT_5_MINI]: 15,
+    [MODEL_IDS.MISTRAL_SMALL_2603]: 14,
+    [MODEL_IDS.MINIMAX_M2_7]: 20,
+    [MODEL_IDS.NEMOTRON_3_SUPER_120B_FREE]: 95,
+    [MODEL_IDS.DEEPSEEK_V3_2]: 20,
   };
 
   const baseTime = baseEstimates[modelId] || 30;

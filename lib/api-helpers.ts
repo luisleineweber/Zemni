@@ -4,9 +4,10 @@ import { ConvexHttpClient } from "convex/browser";
 import { decryptKey } from "./encryption";
 import { isModelAvailable } from "./models";
 import { isModelAvailableViaApiKey } from "./model-availability";
+import { getProviderFromModelId, type ApiProvider } from "./model-routing";
 import { getConvexClient } from "./convex-server";
 
-export type ApiProvider = "openrouter" | "openai" | "anthropic" | "google";
+export type { ApiProvider } from "./model-routing";
 
 export interface ApiKeyInfo {
   provider: ApiProvider;
@@ -36,32 +37,6 @@ type UserContextCacheEntry = {
 
 const userContextCache = new Map<string, UserContextCacheEntry>();
 const inFlightUserContext = new Map<string, Promise<UserContext | null>>();
-
-const OPENROUTER_ONLY_MODEL_IDS = new Set([
-  "openai/gpt-5.4-mini",
-  "openai/gpt-5.4-nano",
-]);
-
-const OPENROUTER_ROUTED_PROVIDERS = new Set([
-  "openrouter",
-  "x-ai",
-  "mistral",
-  "mistralai",
-  "meta",
-  "nvidia",
-  "microsoft",
-  "amazon",
-  "cohere",
-  "moonshotai",
-  "deepseek",
-  "minimax",
-  "qwen",
-  "z-ai",
-  "stepfun",
-  "arcee-ai",
-  "inception",
-  "bytedance-seed",
-]);
 
 const cloneUserContext = (context: UserContext): UserContext => ({
   ...context,
@@ -268,29 +243,6 @@ export function getApiKeyForModel(
     return { key: openRouterKey.key!, provider: "openrouter", isOwnKey: openRouterKey.useOwnKey };
   }
 
-  return null;
-}
-
-/**
- * Extract provider from model ID
- */
-function getProviderFromModelId(modelId: string): ApiProvider | null {
-  if (OPENROUTER_ONLY_MODEL_IDS.has(modelId)) {
-    return "openrouter";
-  }
-
-  const parts = modelId.split("/");
-  if (parts.length < 2) return null;
-  
-  const provider = parts[0].toLowerCase();
-  
-  if (provider === "openai") return "openai";
-  if (provider === "anthropic") return "anthropic";
-  if (provider === "google") return "google";
-  if (OPENROUTER_ROUTED_PROVIDERS.has(provider)) {
-    return "openrouter";
-  }
-  
   return null;
 }
 

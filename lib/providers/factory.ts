@@ -2,66 +2,16 @@ import { generateText, streamText } from "ai";
 import { createOpenAIProvider } from "./openai";
 import { createAnthropicProvider } from "./anthropic";
 import { createGoogleProvider } from "./google";
-import { createOpenRouterClient, createOpenRouterNativeClient } from "../openrouter";
-import type { LanguageModelUsage } from "ai";
+import { createOpenRouterClient } from "../openrouter";
+import { getProviderFromModelId, mapModelNameForProvider, type ApiProvider } from "../model-routing";
 import type { ProviderResult } from "./openai";
 
-export type ApiProvider = "openrouter" | "openai" | "anthropic" | "google";
+export type { ApiProvider } from "../model-routing";
 
 export interface ProviderInfo {
   provider: ApiProvider;
   key: string;
   isOwnKey: boolean;
-}
-
-const OPENROUTER_ONLY_MODEL_IDS = new Set([
-  "openai/gpt-5.4-mini",
-  "openai/gpt-5.4-nano",
-]);
-
-const OPENROUTER_ROUTED_PROVIDERS = new Set([
-  "openrouter",
-  "x-ai",
-  "mistral",
-  "mistralai",
-  "meta",
-  "nvidia",
-  "microsoft",
-  "amazon",
-  "cohere",
-  "moonshotai",
-  "deepseek",
-  "minimax",
-  "qwen",
-  "z-ai",
-  "stepfun",
-  "arcee-ai",
-  "inception",
-  "bytedance-seed",
-]);
-
-
-/**
- * Extract provider from model ID
- */
-export function getProviderFromModelId(modelId: string): ApiProvider | null {
-  if (OPENROUTER_ONLY_MODEL_IDS.has(modelId)) {
-    return "openrouter";
-  }
-
-  const parts = modelId.split("/");
-  if (parts.length < 2) return null;
-
-  const provider = parts[0].toLowerCase() as any;
-
-  if (provider === "openai") return "openai";
-  if (provider === "anthropic") return "anthropic";
-  if (provider === "google") return "google";
-  if (OPENROUTER_ROUTED_PROVIDERS.has(provider)) {
-    return "openrouter";
-  }
-
-  return null;
 }
 
 /**
@@ -87,66 +37,15 @@ export function getProviderForModel(modelId: string, apiKeys: ProviderInfo[]): P
   return null;
 }
 
-function getModelId(fullModelId: string): string {
-  const parts = fullModelId.split("/");
-  return parts.length > 1 ? parts[1] : fullModelId;
-}
-
-/**
- * Map OpenRouter model names to provider-specific API model names
- * Some providers use different naming conventions than OpenRouter
- */
-function mapModelName(modelId: string, provider: ApiProvider): string {
-  const model = getModelId(modelId);
-
-  // Provider-specific model name mappings
-  const modelMaps: Record<ApiProvider, Record<string, string>> = {
-    anthropic: {
-      "claude-sonnet-4.5": "claude-sonnet-4-5",
-      "claude-opus-4.5": "claude-opus-4-5",
-    },
-    openai: {
-      "gpt-5.4": "gpt-5.4-2026-03-05",
-      "gpt-5.2-chat": "gpt-5.2-chat-latest",
-      "gpt-5.2": "gpt-5.2-2025-12-11",
-      "gpt-5.1": "gpt-5.1-2025-11-13",
-      "gpt-5-mini": "gpt-5-mini-2025-08-07",
-      "gpt-oss-120b:free": "gpt-oss-120b",
-      "gpt-oss-120b": "gpt-oss-120b",
-      "gpt-oss-20b:free": "gpt-oss-20b",
-    },
-    google: {
-      "gemini-3-flash-preview": "gemini-3-flash-preview",
-      "gemini-3-pro-preview": "gemini-3-pro-preview",
-    },
-    openrouter: {
-      // OpenRouter uses the same names as OpenRouter (no mapping needed)
-    },
-  };
-
-  const modelMap = modelMaps[provider];
-  if (modelMap && modelMap[model]) {
-    return modelMap[model];
-  }
-
-  // Return original name if no mapping exists
-  return model;
-}
-
-function getEffectiveModelId(modelId: string): string {
-  return getModelId(modelId);
-}
-
-
 export function createProvider(providerInfo: ProviderInfo) {
   switch (providerInfo.provider) {
     case "openai": {
       const provider = createOpenAIProvider(providerInfo.key);
       return {
         generateText: (modelId: string, messages: any[], options: any) =>
-          provider.generateText(mapModelName(modelId, "openai"), messages, options),
+          provider.generateText(mapModelNameForProvider(modelId, "openai"), messages, options),
         streamText: (modelId: string, messages: any[], options: any) =>
-          provider.streamText(mapModelName(modelId, "openai"), messages, options),
+          provider.streamText(mapModelNameForProvider(modelId, "openai"), messages, options),
       };
     }
 
@@ -154,9 +53,9 @@ export function createProvider(providerInfo: ProviderInfo) {
       const provider = createAnthropicProvider(providerInfo.key);
       return {
         generateText: (modelId: string, messages: any[], options: any) =>
-          provider.generateText(mapModelName(modelId, "anthropic"), messages, options),
+          provider.generateText(mapModelNameForProvider(modelId, "anthropic"), messages, options),
         streamText: (modelId: string, messages: any[], options: any) =>
-          provider.streamText(mapModelName(modelId, "anthropic"), messages, options),
+          provider.streamText(mapModelNameForProvider(modelId, "anthropic"), messages, options),
       };
     }
 
@@ -164,9 +63,9 @@ export function createProvider(providerInfo: ProviderInfo) {
       const provider = createGoogleProvider(providerInfo.key);
       return {
         generateText: (modelId: string, messages: any[], options: any) =>
-          provider.generateText(mapModelName(modelId, "google"), messages, options),
+          provider.generateText(mapModelNameForProvider(modelId, "google"), messages, options),
         streamText: (modelId: string, messages: any[], options: any) =>
-          provider.streamText(mapModelName(modelId, "google"), messages, options),
+          provider.streamText(mapModelNameForProvider(modelId, "google"), messages, options),
       };
     }
     case "openrouter":

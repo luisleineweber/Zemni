@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { PREFERRED_DEFAULT_MODEL_ID } from "@/lib/model-routing";
 import type { Model, Subject, Status } from "@/types";
 
 export interface UseAppStateReturn {
@@ -102,7 +103,7 @@ export function useAppState(): UseAppStateReturn {
         if (!res.ok) throw new Error("Could not load models.");
         const data = await res.json() as { models: Model[] };
         setModels(data.models);
-        // Use saved default model, or prefer gpt-oss-120b:free, or fallback to other free tier model
+        // Use saved default model, or prefer configured default, or fallback by tier.
         if (data.models.length > 0) {
           let modelToUse: string;
           
@@ -110,13 +111,12 @@ export function useAppState(): UseAppStateReturn {
             // Use saved preference if available and valid
             modelToUse = savedDefaultModel;
           } else {
-            // Priority: gpt-oss-120b:free > other free tier > basic > plus > first available
-            const gptOss120bFree = data.models.find(m => m.id === "openai/gpt-oss-120b:free");
+            const preferredDefaultModel = data.models.find(m => m.id === PREFERRED_DEFAULT_MODEL_ID);
             const freeModel = data.models.find(m => m.subscriptionTier === "free");
             const basicModel = data.models.find(m => m.subscriptionTier === "basic");
             const plusModel = data.models.find(m => m.subscriptionTier === "plus");
             
-            modelToUse = gptOss120bFree?.id || freeModel?.id || basicModel?.id || plusModel?.id || data.models[0].id;
+            modelToUse = preferredDefaultModel?.id || freeModel?.id || basicModel?.id || plusModel?.id || data.models[0].id;
             
             // Set defaultModel if not already set
             if (!savedDefaultModel) {
