@@ -5,6 +5,7 @@ import { listSubjects } from "@/lib/notion";
 import { trackError } from "@/lib/error-tracking";
 import { decryptKey } from "@/lib/encryption";
 import { getConvexClient } from "@/lib/convex-server";
+import { getNotionDatabaseUrl, normalizeNotionDatabaseId } from "@/lib/notion-database-id";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -13,7 +14,7 @@ export async function GET(request: Request) {
   const envDatabaseId = process.env.NOTION_SUBJECTS_DATABASE_ID;
   const envNotionToken = process.env.NOTION_TOKEN;
 
-  const userDatabaseId = searchParams.get("databaseId")?.trim() || null;
+  const userDatabaseId = normalizeOptionalDatabaseId(searchParams.get("databaseId"));
   const userToken = request.headers.get("x-notion-token")?.trim() || null;
 
   let databaseId: string | null = userDatabaseId;
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
         if (user?.notionToken) {
           notionToken = decryptKey(user.notionToken);
           tokenSource = "convex";
-          databaseId = userDatabaseId || user.notionDatabaseId || null;
+          databaseId = userDatabaseId || normalizeOptionalDatabaseId(user.notionDatabaseId || null);
         }
       }
     } catch (error) {
@@ -43,19 +44,20 @@ export async function GET(request: Request) {
       tokenSource = "env";
     }
     if (!databaseId && tokenSource === "env") {
-      databaseId = envDatabaseId || null;
+      databaseId = normalizeOptionalDatabaseId(envDatabaseId || null);
     }
   }
 
   // Default database ID when using a header token (caller did not specify a databaseId).
   if (userToken && !databaseId) {
-    databaseId = envDatabaseId || null;
+    databaseId = normalizeOptionalDatabaseId(envDatabaseId || null);
   }
 
   // Env tokens may only access the configured default database; any caller-supplied databaseId is rejected unless it
   // matches NOTION_SUBJECTS_DATABASE_ID (and when that env var is unset, env token requests are denied entirely).
   if (userDatabaseId && !userToken && tokenSource === "env") {
-    if (!envDatabaseId || databaseId !== envDatabaseId) {
+    const normalizedEnvDatabaseId = normalizeOptionalDatabaseId(envDatabaseId || null);
+    if (!normalizedEnvDatabaseId || databaseId !== normalizedEnvDatabaseId) {
       return NextResponse.json({ subjects: [], error: "Unauthorized" }, { status: 401 });
     }
   }
@@ -89,7 +91,7 @@ export async function GET(request: Request) {
     let status = 500;
 
     if (isNotFoundError) {
-      errorMessage = "Database not found or not shared with your integration. Please check your database ID and ensure the database is shared with your Notion integration.";
+      errorMessage = "Zemni found this database ID, but Notion has not shared the database with your Zemni integration yet. Open the database in Notion, choose ... -> Add connections, then select Zemni.";
       console.warn(`[Notion] Database not found: ${databaseId}`);
       status = 404;
     } else if (isTimeoutError) {
@@ -120,8 +122,17 @@ export async function GET(request: Request) {
     }
     
     return NextResponse.json(
-      { subjects: [], error: errorMessage },
+      {
+        subjects: [],
+        error: errorMessage,
+        ...(isNotFoundError && databaseId ? { databaseUrl: getNotionDatabaseUrl(databaseId) } : {}),
+      },
       { status }
     );
   }
+}
+
+function normalizeOptionalDatabaseId(value: string | null): string | null {
+  if (!value) return null;
+  return normalizeNotionDatabaseId(value) || null;
 }

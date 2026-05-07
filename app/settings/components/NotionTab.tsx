@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { normalizeNotionDatabaseId } from "@/lib/notion-database-id";
 
-type Notice = { type: "success" | "error"; text: string } | null;
+type Notice = { type: "success" | "error"; text: string; actionHref?: string; actionLabel?: string } | null;
+type NotionSubjectsResponse = { subjects?: unknown; error?: string; databaseUrl?: string };
 
 /**
  * Configure Notion integration settings for exports.
@@ -75,7 +77,7 @@ export function NotionTab() {
     setMessage(null);
 
     try {
-      const cleanedDatabaseId = databaseId.trim();
+      const cleanedDatabaseId = normalizeNotionDatabaseId(databaseId);
 
       if (!notionToken && !hasStoredToken) {
         setMessage({
@@ -141,7 +143,13 @@ export function NotionTab() {
               setMessage({ type: "success", text: "Notion configuration saved and verified." });
             }
           } else {
-            setMessage({ type: "error", text: "Configuration saved but connection test failed. Please check your credentials." });
+            const data = await parseNotionSubjectsResponse(testRes);
+            setMessage({
+              type: "error",
+              text: data.error || "Configuration saved, but Zemni could not read your Notion subjects yet.",
+              actionHref: data.databaseUrl,
+              actionLabel: data.databaseUrl ? "Open database in Notion" : undefined,
+            });
           }
         } else if (exportMethod === "page") {
           setMessage({ type: "success", text: "Notion configuration saved. You can now export directly to pages." });
@@ -277,7 +285,7 @@ export function NotionTab() {
               disabled={loading}
             />
             <p className="field-hint">
-              Find the database ID in the URL: the long string after the last "/" and before "?".
+              Paste the database ID or full Notion database link.
             </p>
           </div>
         )}
@@ -320,7 +328,17 @@ export function NotionTab() {
 
         {message && (
           <div className={`settings-notice ${message.type}`}>
-            {message.text}
+            <span>{message.text}</span>
+            {message.actionHref && message.actionLabel && (
+              <a
+                href={message.actionHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="settings-notice-action"
+              >
+                {message.actionLabel}
+              </a>
+            )}
           </div>
         )}
 
@@ -371,4 +389,12 @@ export function NotionTab() {
       </div>
     </section>
   );
+}
+
+async function parseNotionSubjectsResponse(response: Response): Promise<NotionSubjectsResponse> {
+  try {
+    return (await response.json()) as NotionSubjectsResponse;
+  } catch {
+    return {};
+  }
 }
