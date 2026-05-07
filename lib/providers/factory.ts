@@ -106,6 +106,7 @@ function mapModelName(modelId: string, provider: ApiProvider): string {
       "claude-opus-4.5": "claude-opus-4-5",
     },
     openai: {
+      "gpt-5.5": "gpt-5.5",
       "gpt-5.4": "gpt-5.4-2026-03-05",
       "gpt-5.2-chat": "gpt-5.2-chat-latest",
       "gpt-5.2": "gpt-5.2-2025-12-11",

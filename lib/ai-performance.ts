@@ -88,6 +88,7 @@ export const getEstimatedCompletionTime = (
     "openai/gpt-oss-20b": 60,
     "anthropic/claude-opus-4.5": 75,
     "anthropic/claude-sonnet-4.5": 45,
+    "openai/gpt-5.5": 42,
     "openai/gpt-5.4": 35,
     "openai/gpt-5.4-mini": 18,
     "openai/gpt-5.4-nano": 10,
@@ -98,6 +99,8 @@ export const getEstimatedCompletionTime = (
     "minimax/minimax-m2.7": 20,
     "nvidia/nemotron-3-super-120b-a12b:free": 95,
     "deepseek/deepseek-v3.2": 20,
+    "deepseek/deepseek-v4-pro": 28,
+    "deepseek/deepseek-v4-flash": 16,
   };
 
   const baseTime = baseEstimates[modelId] || 30;
