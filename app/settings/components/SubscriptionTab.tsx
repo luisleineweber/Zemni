@@ -32,26 +32,30 @@ const TIER_META: Record<
     eyebrow: "Starter access",
     price: "$0",
     quota: "5 generations / month",
-    summary: "A lightweight plan for testing workflows and short study sessions.",
+    summary:
+      "A lightweight plan for testing workflows and short study sessions.",
   },
   basic: {
     eyebrow: "Wider model bench",
     price: "Coming soon",
     quota: "20 generations / month",
-    summary: "Adds the current mid-tier catalog for more regular coursework and revision.",
+    summary:
+      "Adds the current mid-tier catalog for more regular coursework and revision.",
   },
   plus: {
     eyebrow: "Stronger reasoning",
     price: "$8 / month",
     quota: "100 generations / month",
-    summary: "Unlocks higher-end reasoning models while keeping the lower-tier catalog included.",
+    summary:
+      "Unlocks higher-end reasoning models while keeping the lower-tier catalog included.",
     badge: "Most Popular",
   },
   pro: {
     eyebrow: "Full catalog",
     price: "$14 / month",
     quota: "200 generations / month",
-    summary: "Gives access to every active model currently configured in Zemni.",
+    summary:
+      "Gives access to every active model currently configured in Zemni.",
     badge: "All Models",
   },
 };
@@ -70,7 +74,9 @@ export function SubscriptionTab() {
   const currentUser = useQuery(api.users.getCurrentUser);
   const { models } = useAppState();
   const [loading, setLoading] = useState(false);
-  const [tierChangeNotification, setTierChangeNotification] = useState<string | null>(null);
+  const [tierChangeNotification, setTierChangeNotification] = useState<
+    string | null
+  >(null);
   const [error, setError] = useState<string | null>(null);
   const previousTierRef = useRef<string | undefined>(undefined);
   const toast = useToastContext();
@@ -107,7 +113,7 @@ export function SubscriptionTab() {
       const tierIndex = TIER_ORDER.indexOf(tier);
       const exactModels = byTier[tier];
       const accessibleModels = TIER_ORDER.slice(0, tierIndex + 1).flatMap(
-        (includedTier) => byTier[includedTier]
+        (includedTier) => byTier[includedTier],
       );
       const lowerTierCount = accessibleModels.length - exactModels.length;
 
@@ -119,9 +125,6 @@ export function SubscriptionTab() {
       };
     });
   }, [models]);
-
-  const currentTierDetails =
-    tierDetails.find((entry) => entry.tier === subscriptionTier) ?? tierDetails[0];
 
   const handleManageSubscription = async () => {
     setLoading(true);
@@ -147,7 +150,8 @@ export function SubscriptionTab() {
       }
     } catch (caughtError) {
       console.error("Failed to create portal session:", caughtError);
-      const errorMessage = "Network error. Please check your connection and try again.";
+      const errorMessage =
+        "Network error. Please check your connection and try again.";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -162,7 +166,10 @@ export function SubscriptionTab() {
       </div>
 
       {tierChangeNotification && (
-        <div className="settings-notice success" style={{ marginBottom: "16px" }}>
+        <div
+          className="settings-notice success"
+          style={{ marginBottom: "16px" }}
+        >
           {tierChangeNotification}
         </div>
       )}
@@ -174,9 +181,15 @@ export function SubscriptionTab() {
       )}
 
       {!isBillingEnabled && (
-        <div className="settings-notice info" style={{ marginBottom: "16px" }}>
-          Subscriptions are coming soon. No purchases are available yet. You can still unlock more
-          models with your own API keys in Settings / API Keys.
+        <div
+          className="settings-notice warning settings-subscription-notice"
+          style={{ marginBottom: "16px" }}
+        >
+          <strong>Subscriptions are not available yet.</strong>
+          <span>
+            Purchases are disabled for now. To unlock more models, add your own
+            API keys in Settings / API Keys.
+          </span>
         </div>
       )}
 
@@ -186,7 +199,10 @@ export function SubscriptionTab() {
           <div className="settings-subscription-overview">
             <div className="settings-subscription-overview-main">
               <div className="settings-subscription-overview-copy">
-                <span className="settings-tier-badge-large" data-tier={subscriptionTier}>
+                <span
+                  className="settings-tier-badge-large"
+                  data-tier={subscriptionTier}
+                >
                   {TIER_LABELS[subscriptionTier]}
                 </span>
                 <div className="settings-subscription-overview-text">
@@ -209,14 +225,6 @@ export function SubscriptionTab() {
                 </button>
               )}
             </div>
-            <div className="settings-subscription-overview-meta">
-              <span className="settings-subscription-pill">
-                {currentTierDetails?.accessibleModels.length ?? 0} active models in plan
-              </span>
-              <span className="settings-subscription-pill">
-                {currentTierDetails?.exactModels.length ?? 0} native to this tier
-              </span>
-            </div>
           </div>
         </div>
 
@@ -225,84 +233,126 @@ export function SubscriptionTab() {
         <div className="field">
           <label className="field-label">Subscription Tiers</label>
           <div className="settings-tiers-comparison">
-            {tierDetails.map(({ tier, exactModels, accessibleModels, lowerTierCount }) => {
+            {tierDetails.map(({ tier, exactModels, accessibleModels }) => {
               const isCurrent = subscriptionTier === tier;
               const meta = TIER_META[tier];
+              const lowerTierIndex = TIER_ORDER.indexOf(tier) - 1;
+              const lowerTierLabel =
+                lowerTierIndex >= 0
+                  ? TIER_LABELS[TIER_ORDER[lowerTierIndex]]
+                  : null;
 
               return (
                 <article
                   key={tier}
-                  className={`settings-tier-card${isCurrent ? " active" : ""}`}
+                  className={`settings-tier-card-flip${isCurrent ? " active" : ""}`}
                   data-tier={tier}
                 >
-                  <div className="settings-tier-card-header">
-                    <div>
-                      <p className="settings-tier-eyebrow">{meta.eyebrow}</p>
-                      <h3>{TIER_LABELS[tier]}</h3>
-                    </div>
-                    <div className="settings-tier-card-badges">
-                      {meta.badge && !isCurrent && (
-                        <span className="settings-tier-badge-featured">{meta.badge}</span>
-                      )}
-                      {isCurrent && <span className="settings-tier-badge-current">Current</span>}
-                    </div>
-                  </div>
-
-                  <div className="settings-tier-price-block">
-                    <div className="settings-tier-price">{meta.price}</div>
-                    <div className="settings-tier-quota">{meta.quota}</div>
-                  </div>
-
-                  <p className="settings-tier-summary">{meta.summary}</p>
-
-                  <div className="settings-tier-stats">
-                    <div className="settings-tier-stat">
-                      <span className="settings-tier-stat-value">{accessibleModels.length}</span>
-                      <span className="settings-tier-stat-label">active models</span>
-                    </div>
-                    <div className="settings-tier-stat">
-                      <span className="settings-tier-stat-value">{exactModels.length}</span>
-                      <span className="settings-tier-stat-label">tier models</span>
-                    </div>
-                  </div>
-
-                  <div className="settings-tier-model-block">
-                    <div className="settings-tier-model-label">Current tier models</div>
-                    {exactModels.length > 0 ? (
-                      <div className="settings-tier-model-chips">
-                        {exactModels.map((model) => (
-                          <span key={model.id} className="settings-tier-model-chip">
-                            {model.displayName}
+                  <div className="settings-tier-card-inner">
+                    {/* ── FRONT ── */}
+                    <div className="settings-tier-card-face settings-tier-card-front">
+                      <div>
+                        <div className="settings-tier-card-header">
+                          <div>
+                            <p className="settings-tier-eyebrow">
+                              {meta.eyebrow}
+                            </p>
+                            <h3>{TIER_LABELS[tier]}</h3>
+                          </div>
+                          <div className="settings-tier-card-badges">
+                            {meta.badge && !isCurrent && (
+                              <span className="settings-tier-badge-featured">
+                                {meta.badge}
+                              </span>
+                            )}
+                            {isCurrent && (
+                              <span className="settings-tier-badge-current">
+                                Current
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="settings-tier-price-row">
+                          <span className="settings-tier-price">
+                            {meta.price}
                           </span>
-                        ))}
+                          <span className="settings-tier-quota">
+                            {meta.quota}
+                          </span>
+                        </div>
                       </div>
-                    ) : (
-                      <p className="settings-tier-empty">Catalog is still loading for this tier.</p>
-                    )}
-                  </div>
 
-                  <ul className="settings-tier-features">
-                    <li>
-                      <IconCheck />
-                      <span>{meta.quota}</span>
-                    </li>
-                    <li>
-                      <IconCheck />
-                      <span>{accessibleModels.length} active models currently mapped</span>
-                    </li>
-                    <li>
-                      <IconCheck />
-                      <span>
-                        {lowerTierCount > 0
-                          ? `Includes all ${lowerTierCount} lower-tier models`
-                          : "Includes the starter model set"}
+                      <div className="settings-tier-front-stats">
+                        <div className="settings-tier-front-stat">
+                          <span className="settings-tier-front-stat-value">
+                            {accessibleModels.length}
+                          </span>
+                          <span className="settings-tier-front-stat-label">
+                            active models
+                          </span>
+                        </div>
+                      </div>
+
+                      <span className="settings-tier-flip-hint">
+                        Hover to explore &rarr;
                       </span>
-                    </li>
-                  </ul>
+                    </div>
 
-                  <button type="button" className="btn btn-secondary settings-tier-action" disabled>
-                    {isCurrent ? "Current Plan" : "Coming Soon"}
-                  </button>
+                    {/* ── BACK ── */}
+                    <div className="settings-tier-card-face settings-tier-card-back">
+                      <p className="settings-tier-back-summary">
+                        {meta.summary}
+                      </p>
+
+                      {exactModels.length > 0 && (
+                        <div className="settings-tier-back-model-showcase">
+                          {exactModels.slice(0, 4).map((model) => (
+                            <span
+                              key={model.id}
+                              className="settings-tier-model-chip-sm"
+                            >
+                              {model.displayName}
+                            </span>
+                          ))}
+                          {exactModels.length > 4 && (
+                            <span className="settings-tier-model-chip-more">
+                              +{exactModels.length - 4} more
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      <ul className="settings-tier-back-features">
+                        <li>
+                          <IconCheck />
+                          <span>{meta.quota}</span>
+                        </li>
+                        <li>
+                          <IconCheck />
+                          <span>
+                            {accessibleModels.length} active models currently
+                            mapped
+                          </span>
+                        </li>
+                        <li>
+                          <IconCheck />
+                          <span>
+                            {lowerTierLabel
+                              ? `Includes everything in ${lowerTierLabel}`
+                              : "Starter model set"}
+                          </span>
+                        </li>
+                      </ul>
+
+                      <button
+                        type="button"
+                        className="btn btn-secondary settings-tier-action"
+                        disabled
+                      >
+                        {isCurrent ? "Current Plan" : "Coming Soon"}
+                      </button>
+                    </div>
+                  </div>
                 </article>
               );
             })}
