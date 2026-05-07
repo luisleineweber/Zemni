@@ -89,7 +89,7 @@ export default function BenchmarksPage() {
         <p>No benchmark results found. Run the benchmark first:</p>
         <pre style={{ background: "#f5f5f5", padding: "1rem", borderRadius: "4px", overflow: "auto" }}>
           {`cd benchmark
-python run_benchmark.py --models "gpt-4o,claude-sonnet" --tasks summary,quiz`}
+python run_benchmark.py --models "deepseek/deepseek-v4-pro,deepseek/deepseek-v4-flash" --tasks summary,quiz --test-cases benchmark/results/test_cases.release-deepseek.json`}
         </pre>
       </div>
     );

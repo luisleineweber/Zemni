@@ -41,7 +41,7 @@ export function LeaderboardTable({
           {filters.task.charAt(0).toUpperCase() + filters.task.slice(1)} data will be available later
         </div>
         <div className="benchmark-empty-subtitle">
-          So far only summary tests have been executed. Quiz and flashcard benchmarks will follow.
+          This release pass currently covers summary and quiz for the new DeepSeek models. Run flashcards separately if needed.
         </div>
       </div>
     );

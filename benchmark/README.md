@@ -91,7 +91,7 @@ python generate_tests.py --count 24
 Run benchmarks on models to evaluate their performance:
 
 ```bash
-python run_benchmark.py --models "openai/gpt-4o,anthropic/claude-sonnet-4.5" --tasks summary,quiz
+python run_benchmark.py --models "deepseek/deepseek-v4-pro,deepseek/deepseek-v4-flash" --tasks summary,quiz --test-cases benchmark/results/test_cases.release-deepseek.json
 ```
 
 **Flags:**
@@ -119,6 +119,8 @@ python run_benchmark.py --models "openai/gpt-4o,anthropic/claude-sonnet-4.5" --t
   - `strict`: exclude low-judge-count, high-variance, and low-agreement quality samples
   - `variance_only`: exclude only `consensus_flag=high_variance`
   - `off`: disable quality exclusion
+
+For a smaller release pass, keep the model list to the new DeepSeek releases, limit the run to `summary,quiz`, and point `--test-cases` at `benchmark/results/test_cases.release-deepseek.json`.
 
 **Caching:** Results are cached by default using hash-based keys (model_id + task + test_case). Use `--force` to ignore cache, or `--skip-cached` to skip cached entries.
 
