@@ -23,6 +23,23 @@ export type ModelSpec = {
   description?: string;
 };
 
+/** Sort models by subscription tier, then alphabetically by display name. */
+const sortModelsByTier = (models: ModelSpec[]): ModelSpec[] => {
+  const tierOrder = ["free", "basic", "plus", "pro"];
+
+  const getTierOrder = (tier?: string): number => {
+    if (!tier) return 999;
+    const index = tierOrder.indexOf(tier.toLowerCase());
+    return index === -1 ? 999 : index;
+  };
+
+  return [...models].sort((a, b) => {
+    const tierDiff = getTierOrder(a.subscriptionTier) - getTierOrder(b.subscriptionTier);
+    if (tierDiff !== 0) return tierDiff;
+    return (a.displayName || a.name).localeCompare(b.displayName || b.name);
+  });
+};
+
 const DEFAULT_MODELS: ModelSpec[] = [
   {
     name: "gpt-4o",
@@ -45,40 +62,18 @@ const MODEL_FILES = [
   "models.example.json"
 ];
 
+let modelsCache: {
+  filePath: string;
+  modifiedAt: number;
+  models: ModelSpec[];
+} | null = null;
+
 const toNumber = (value: unknown): number | null => {
   if (value === null || value === undefined || value === "") {
     return null;
   }
   const num = Number(value);
   return Number.isNaN(num) ? null : num;
-};
-
-/**
- * Sorts models by subscription tier, then alphabetically by display name
- */
-const sortModelsByTier = (models: ModelSpec[]): ModelSpec[] => {
-  const tierOrder = ["free", "basic", "plus", "pro"];
-
-  const getTierOrder = (tier?: string): number => {
-    if (!tier) return 999; // Unknown tiers go to the end
-    const index = tierOrder.indexOf(tier.toLowerCase());
-    return index === -1 ? 999 : index;
-  };
-
-  return [...models].sort((a, b) => {
-    const tierA = a.subscriptionTier || "";
-    const tierB = b.subscriptionTier || "";
-    const tierDiff = getTierOrder(tierA) - getTierOrder(tierB);
-
-    if (tierDiff !== 0) {
-      return tierDiff;
-    }
-
-    // Within same tier, sort alphabetically by display name
-    const nameA = a.displayName || a.name;
-    const nameB = b.displayName || b.name;
-    return nameA.localeCompare(nameB);
-  });
 };
 
 const parseModelsJson = (data: unknown): ModelSpec[] => {
@@ -179,6 +174,14 @@ export const loadModels = async (): Promise<ModelSpec[]> => {
   if (!modelsFile) {
     models = DEFAULT_MODELS;
   } else {
+    const fileStats = await fs.stat(modelsFile);
+    if (
+      modelsCache?.filePath === modelsFile &&
+      modelsCache.modifiedAt === fileStats.mtimeMs
+    ) {
+      return modelsCache.models;
+    }
+
     const raw = await fs.readFile(modelsFile, "utf8");
     models = parseModelsJson(JSON.parse(raw));
   }
@@ -186,11 +189,17 @@ export const loadModels = async (): Promise<ModelSpec[]> => {
   // Filter out models with available: false
   models = models.filter((model) => model.available !== false);
 
-  // Sort by tier if feature is enabled
-  const tiersEnabled = isSubscriptionTiersEnabled();
-
-  if (tiersEnabled) {
+  if (isSubscriptionTiersEnabled()) {
     models = sortModelsByTier(models);
+  }
+
+  if (modelsFile) {
+    const fileStats = await fs.stat(modelsFile);
+    modelsCache = {
+      filePath: modelsFile,
+      modifiedAt: fileStats.mtimeMs,
+      models,
+    };
   }
 
   return models;

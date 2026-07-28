@@ -1,7 +1,16 @@
-import { describe, it, expect } from "vitest";
+import { afterEach, beforeEach, describe, it, expect, vi } from "vitest";
 import { isModelAvailable } from "@/lib/models";
+import { getModelAvailability, getProviderFromModelId, isModelAvailableViaApiKey } from "@/lib/model-availability";
 
 describe("isModelAvailable", () => {
+  beforeEach(() => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_SUBSCRIPTION_TIERS", "true");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   describe("Model without tier", () => {
     it("should be available to all users", () => {
       expect(isModelAvailable({}, null)).toBe(true);
@@ -95,4 +104,50 @@ describe("isModelAvailable", () => {
       expect(isModelAvailable(proModel, "basic")).toBe(false);
     });
   });
+
+  describe("when subscription tiers are disabled", () => {
+    it("makes tier metadata descriptive instead of restrictive", () => {
+      vi.stubEnv("NEXT_PUBLIC_ENABLE_SUBSCRIPTION_TIERS", "false");
+
+      for (const userTier of [null, "free", "basic", "plus", "pro"] as const) {
+        expect(isModelAvailable({ subscriptionTier: "pro" }, userTier)).toBe(true);
+      }
+
+      expect(getModelAvailability({ id: "openai/example", subscriptionTier: "pro" }, null)).toEqual({
+        isAvailable: true,
+        isCoveredBySubscription: false,
+        requiresOwnKey: false,
+        reason: "system",
+      });
+    });
+  });
+});
+
+describe("current OpenRouter model families", () => {
+  it("routes current non-native families through OpenRouter", () => {
+    const openRouterFamilies = [
+      "deepseek/deepseek-v4-flash",
+      "moonshotai/kimi-k3",
+      "z-ai/glm-5.2",
+      "minimax/minimax-m3",
+      "qwen/qwen3.7-flash",
+      "mistralai/mistral-medium-3-5",
+      "stepfun/step-3.7-flash",
+      "inclusionai/ling-3.0-flash:free",
+    ];
+
+    for (const modelId of openRouterFamilies) {
+      expect(getProviderFromModelId(modelId), modelId).toBe("openrouter");
+      expect(isModelAvailableViaApiKey(modelId, ["openrouter"]), modelId).toBe(true);
+    }
+
+    expect(getProviderFromModelId("google/gemma-4-31b-it:free")).toBe("openrouter");
+  });
+
+  it("keeps native provider detection for GPT, Claude, and Gemini", () => {
+    expect(getProviderFromModelId("openai/gpt-5.6-sol")).toBe("openai");
+    expect(getProviderFromModelId("anthropic/claude-opus-5")).toBe("anthropic");
+    expect(getProviderFromModelId("google/gemini-3.6-flash")).toBe("google");
+  });
+
 });

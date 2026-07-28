@@ -2,6 +2,46 @@ import { useState, useEffect, useRef } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Model, Subject, Status } from "@/types";
+import { isSubscriptionTiersEnabled } from "@/lib/model-availability";
+
+let sharedModels: Model[] | null = null;
+let sharedModelsPromise: Promise<Model[]> | null = null;
+
+/**
+ * Load the model catalog once per browser session when availability is not user-specific.
+ * Tier-filtered responses stay uncached because they depend on the authenticated user.
+ */
+async function fetchModelsFromApi(): Promise<Model[]> {
+  const canShareResponse = !isSubscriptionTiersEnabled();
+
+  if (canShareResponse && sharedModels) {
+    return sharedModels;
+  }
+
+  const request = async (): Promise<Model[]> => {
+    const res = await fetch("/api/models");
+    if (!res.ok) throw new Error("Could not load models.");
+    const data = await res.json() as { models: Model[] };
+    return data.models;
+  };
+
+  if (!canShareResponse) {
+    return request();
+  }
+
+  if (!sharedModelsPromise) {
+    sharedModelsPromise = request()
+      .then((models) => {
+        sharedModels = models;
+        return models;
+      })
+      .finally(() => {
+        sharedModelsPromise = null;
+      });
+  }
+
+  return sharedModelsPromise;
+}
 
 export interface UseAppStateReturn {
   theme: "light" | "dark";
@@ -98,25 +138,23 @@ export function useAppState(): UseAppStateReturn {
 
     const fetchModels = async () => {
       try {
-        const res = await fetch("/api/models");
-        if (!res.ok) throw new Error("Could not load models.");
-        const data = await res.json() as { models: Model[] };
-        setModels(data.models);
+        const modelsFromApi = await fetchModelsFromApi();
+        setModels(modelsFromApi);
         // Use saved default model, or prefer gpt-oss-120b:free, or fallback to other free tier model
-        if (data.models.length > 0) {
+        if (modelsFromApi.length > 0) {
           let modelToUse: string;
           
-          if (savedDefaultModel && data.models.find(m => m.id === savedDefaultModel)) {
+          if (savedDefaultModel && modelsFromApi.find(m => m.id === savedDefaultModel)) {
             // Use saved preference if available and valid
             modelToUse = savedDefaultModel;
           } else {
             // Priority: gpt-oss-120b:free > other free tier > basic > plus > first available
-            const gptOss120bFree = data.models.find(m => m.id === "openai/gpt-oss-120b:free");
-            const freeModel = data.models.find(m => m.subscriptionTier === "free");
-            const basicModel = data.models.find(m => m.subscriptionTier === "basic");
-            const plusModel = data.models.find(m => m.subscriptionTier === "plus");
+            const gptOss120bFree = modelsFromApi.find(m => m.id === "openai/gpt-oss-120b:free");
+            const freeModel = modelsFromApi.find(m => m.subscriptionTier === "free");
+            const basicModel = modelsFromApi.find(m => m.subscriptionTier === "basic");
+            const plusModel = modelsFromApi.find(m => m.subscriptionTier === "plus");
             
-            modelToUse = gptOss120bFree?.id || freeModel?.id || basicModel?.id || plusModel?.id || data.models[0].id;
+            modelToUse = gptOss120bFree?.id || freeModel?.id || basicModel?.id || plusModel?.id || modelsFromApi[0].id;
             
             // Set defaultModel if not already set
             if (!savedDefaultModel) {
