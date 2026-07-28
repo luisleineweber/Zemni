@@ -71,7 +71,7 @@ export function ModelSelector({
     };
   }, [isOpen, mounted]);
 
-  // Group models by tier
+  // Group models by their planned subscription tier.
   const groupedModels = useMemo(() => {
     const groups: Record<string, Model[]> = {};
 
@@ -83,7 +83,7 @@ export function ModelSelector({
       groups[tier].push(model);
     });
 
-    // Sort tiers according to order, then alphabetically within each tier
+    // Sort tiers according to order, then alphabetically within each tier.
     const sortedGroups: Record<string, Model[]> = {};
     TIER_ORDER.forEach(tier => {
       if (groups[tier]) {
