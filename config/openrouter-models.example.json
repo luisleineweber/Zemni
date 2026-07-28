@@ -1,151 +1,137 @@
 [
   {
-    "id": "openai/gpt-5.3-chat",
-    "display_name": "GPT-5.3 Instant",
-    "subscription_tier": "pro",
-    "available": true,
+    "id": "anthropic/claude-haiku-4.5",
+    "display_name": "Claude Haiku 4.5",
+    "subscription_tier": "basic",
+    "available": false,
     "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
+      "tiktoken_encoding": "Claude"
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 1.75,
-      "output_per_1m": 14
+      "input_per_1m": 1,
+      "output_per_1m": 5
     }
   },
   {
-    "id": "openai/gpt-5.4",
-    "display_name": "GPT-5.4",
+    "id": "anthropic/claude-opus-5",
+    "display_name": "Claude Opus 5",
     "subscription_tier": "pro",
     "available": true,
     "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 2.5,
-      "output_per_1m": 15
-    }
-  },
-  {
-    "id": "openai/gpt-5.5",
-    "display_name": "GPT-5.5",
-    "subscription_tier": "pro",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
+      "tiktoken_encoding": "Claude"
     },
     "pricing": {
       "currency": "USD",
       "input_per_1m": 5,
-      "output_per_1m": 30
+      "output_per_1m": 25
     }
   },
   {
-    "id": "openai/gpt-5.4-mini",
-    "display_name": "GPT-5.4 Mini",
-    "subscription_tier": "basic",
+    "id": "anthropic/claude-sonnet-5",
+    "display_name": "Claude Sonnet 5",
+    "subscription_tier": "plus",
     "available": true,
     "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
+      "tiktoken_encoding": "Claude"
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 0.75,
-      "output_per_1m": 4.5
-    }
-  },
-  {
-    "id": "openai/gpt-5.4-nano",
-    "display_name": "GPT-5.4 Nano",
-    "subscription_tier": "free",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.2,
-      "output_per_1m": 1.25
-    }
-  },
-  {
-    "id": "openai/gpt-5.2",
-    "display_name": "GPT-5.2",
-    "subscription_tier": "pro",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 1.75,
-      "output_per_1m": 14
-    }
-  },
-  {
-    "id": "openai/gpt-5.2-chat",
-    "display_name": "GPT-5.2 Instant",
-    "subscription_tier": "pro",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 1.75,
-      "output_per_1m": 14
-    }
-  },
-  {
-    "id": "openai/gpt-5.1",
-    "display_name": "GPT-5.1",
-    "subscription_tier": "plus",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 1.25,
+      "input_per_1m": 2,
       "output_per_1m": 10
     }
   },
   {
-    "id": "openai/gpt-5-mini",
-    "display_name": "GPT-5 Mini",
+    "id": "deepseek/deepseek-v4-flash",
+    "display_name": "DeepSeek V4 Flash",
+    "subscription_tier": "free",
+    "available": true,
+    "tokenizer": {
+      "tiktoken_encoding": "DeepSeek"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 0.14,
+      "output_per_1m": 0.28
+    }
+  },
+  {
+    "id": "deepseek/deepseek-v4-pro",
+    "display_name": "DeepSeek V4 Pro",
+    "subscription_tier": "plus",
+    "available": true,
+    "tokenizer": {
+      "tiktoken_encoding": "DeepSeek"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 0.435,
+      "output_per_1m": 0.87
+    }
+  },
+  {
+    "id": "google/gemini-3.1-pro-preview",
+    "display_name": "Gemini 3.1 Pro",
+    "subscription_tier": "pro",
+    "available": false,
+    "tokenizer": {
+      "tiktoken_encoding": "Gemini"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 2,
+      "output_per_1m": 12
+    }
+  },
+  {
+    "id": "google/gemini-3.5-flash",
+    "display_name": "Gemini 3.5 Flash",
+    "subscription_tier": "plus",
+    "available": false,
+    "tokenizer": {
+      "tiktoken_encoding": "Gemini"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 1.5,
+      "output_per_1m": 9
+    }
+  },
+  {
+    "id": "google/gemini-3.5-flash-lite",
+    "display_name": "Gemini 3.5 Flash-Lite",
     "subscription_tier": "basic",
-    "available": false,
+    "available": true,
     "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
+      "tiktoken_encoding": "Gemini"
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 0.25,
-      "output_per_1m": 2
+      "input_per_1m": 0.3,
+      "output_per_1m": 2.5
     }
   },
   {
-    "id": "openai/gpt-5-nano",
-    "display_name": "GPT-5 Nano",
-    "subscription_tier": "free",
-    "available": false,
+    "id": "google/gemini-3.6-flash",
+    "display_name": "Gemini 3.6 Flash",
+    "subscription_tier": "plus",
+    "available": true,
     "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
+      "tiktoken_encoding": "Gemini"
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 0.05,
-      "output_per_1m": 0.4
+      "input_per_1m": 1.5,
+      "output_per_1m": 7.5
     }
   },
   {
-    "id": "openai/gpt-oss-120b:free",
-    "display_name": "GPT OSS 120B",
+    "id": "google/gemma-4-31b-it:free",
+    "display_name": "Gemma 4 31B (Free)",
     "subscription_tier": "free",
     "available": false,
     "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
+      "tiktoken_encoding": "Gemma"
     },
     "pricing": {
       "currency": "USD",
@@ -154,26 +140,12 @@
     }
   },
   {
-    "id": "openai/gpt-oss-120b",
-    "display_name": "GPT OSS 120B",
-    "subscription_tier": "free",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.039,
-      "output_per_1m": 0.19
-    }
-  },
-  {
-    "id": "openai/gpt-oss-20b:free",
-    "display_name": "GPT OSS 20B (Free)",
+    "id": "inclusionai/ling-3.0-flash:free",
+    "display_name": "Ling 3.0 Flash (Free)",
     "subscription_tier": "free",
     "available": false,
     "tokenizer": {
-      "tiktoken_encoding": "o200k_base"
+      "tiktoken_encoding": "Other"
     },
     "pricing": {
       "currency": "USD",
@@ -182,12 +154,54 @@
     }
   },
   {
-    "id": "google/gemini-3-flash-preview",
-    "display_name": "Gemini 3 Flash",
+    "id": "minimax/minimax-m3",
+    "display_name": "MiniMax M3",
     "subscription_tier": "basic",
     "available": true,
     "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
+      "tiktoken_encoding": "Other"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 0.3,
+      "output_per_1m": 1.2
+    }
+  },
+  {
+    "id": "mistralai/mistral-medium-3-5",
+    "display_name": "Mistral Medium 3.5",
+    "subscription_tier": "plus",
+    "available": true,
+    "tokenizer": {
+      "tiktoken_encoding": "Mistral"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 1.5,
+      "output_per_1m": 7.5
+    }
+  },
+  {
+    "id": "moonshotai/kimi-k3",
+    "display_name": "Kimi K3",
+    "subscription_tier": "pro",
+    "available": true,
+    "tokenizer": {
+      "tiktoken_encoding": "Other"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 3,
+      "output_per_1m": 15
+    }
+  },
+  {
+    "id": "openai/gpt-5.6-luna",
+    "display_name": "GPT-5.6 Luna",
+    "subscription_tier": "basic",
+    "available": true,
+    "tokenizer": {
+      "tiktoken_encoding": "GPT"
     },
     "pricing": {
       "currency": "USD",
@@ -196,134 +210,64 @@
     }
   },
   {
-    "id": "google/gemini-3-pro-preview",
-    "display_name": "Gemini 3 Pro",
-    "subscription_tier": "pro",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 2,
-      "output_per_1m": 12
-    }
-  },
-  {
-    "id": "google/gemini-3.1-pro-preview",
-    "display_name": "Gemini 3.1 Pro",
+    "id": "openai/gpt-5.6-sol",
+    "display_name": "GPT-5.6 Sol",
     "subscription_tier": "pro",
     "available": true,
     "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
+      "tiktoken_encoding": "GPT"
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 2,
-      "output_per_1m": 12
+      "input_per_1m": 5,
+      "output_per_1m": 30
     }
   },
   {
-    "id": "google/gemini-3.1-flash-lite-preview",
-    "display_name": "Gemini 3.1 Flash Lite",
-    "subscription_tier": "basic",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.25,
-      "output_per_1m": 1.5
-    }
-  },
-  {
-    "id": "anthropic/claude-sonnet-4.5",
-    "display_name": "Claude Sonnet 4.5",
+    "id": "openai/gpt-5.6-terra",
+    "display_name": "GPT-5.6 Terra",
     "subscription_tier": "plus",
     "available": false,
     "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
+      "tiktoken_encoding": "GPT"
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 3,
-      "output_per_1m": 15
+      "input_per_1m": 1.25,
+      "output_per_1m": 7.5
     }
   },
   {
-    "id": "anthropic/claude-sonnet-4.6",
-    "display_name": "Claude Sonnet 4.6",
-    "subscription_tier": "plus",
+    "id": "openai/gpt-oss-120b",
+    "display_name": "GPT OSS 120B",
+    "subscription_tier": "free",
     "available": true,
     "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
+      "tiktoken_encoding": "GPT"
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 3,
-      "output_per_1m": 15
+      "input_per_1m": 0.037,
+      "output_per_1m": 0.17
     }
   },
   {
-    "id": "anthropic/claude-opus-4.5",
-    "display_name": "Claude Opus 4.5",
-    "subscription_tier": "pro",
+    "id": "openai/gpt-oss-20b:free",
+    "display_name": "GPT OSS 20B (Free)",
+    "subscription_tier": "free",
     "available": false,
     "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
+      "tiktoken_encoding": "GPT"
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 5,
-      "output_per_1m": 25
+      "input_per_1m": 0,
+      "output_per_1m": 0
     }
   },
   {
-    "id": "anthropic/claude-opus-4.6",
-    "display_name": "Claude Opus 4.6",
-    "subscription_tier": "pro",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 5,
-      "output_per_1m": 25
-    }
-  },
-  {
-    "id": "anthropic/claude-opus-4.7",
-    "display_name": "Claude Opus 4.7",
-    "subscription_tier": "pro",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 5,
-      "output_per_1m": 25
-    }
-  },
-  {
-    "id": "mistralai/mistral-small-2603",
-    "display_name": "Mistral Small 4",
-    "subscription_tier": "basic",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.15,
-      "output_per_1m": 0.6
-    }
-  },
-  {
-    "id": "x-ai/grok-4.1-fast",
-    "display_name": "Grok 4.1 Fast",
+    "id": "openrouter/free",
+    "display_name": "Free Models Router",
     "subscription_tier": "free",
     "available": true,
     "tokenizer": {
@@ -331,13 +275,69 @@
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 0.2,
-      "output_per_1m": 0.5
+      "input_per_1m": 0,
+      "output_per_1m": 0
     }
   },
   {
-    "id": "x-ai/grok-4.20",
-    "display_name": "Grok 4.20",
+    "id": "qwen/qwen3.7-flash",
+    "display_name": "Qwen3.7 Flash",
+    "subscription_tier": "basic",
+    "available": true,
+    "tokenizer": {
+      "tiktoken_encoding": "Qwen"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 0.03,
+      "output_per_1m": 0.13
+    }
+  },
+  {
+    "id": "qwen/qwen3.7-max",
+    "display_name": "Qwen3.7 Max",
+    "subscription_tier": "plus",
+    "available": true,
+    "tokenizer": {
+      "tiktoken_encoding": "Qwen"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 1.475,
+      "output_per_1m": 4.425
+    }
+  },
+  {
+    "id": "qwen/qwen3.7-plus",
+    "display_name": "Qwen3.7 Plus",
+    "subscription_tier": "plus",
+    "available": false,
+    "tokenizer": {
+      "tiktoken_encoding": "Qwen"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 0.32,
+      "output_per_1m": 1.28
+    }
+  },
+  {
+    "id": "stepfun/step-3.7-flash",
+    "display_name": "Step 3.7 Flash",
+    "subscription_tier": "free",
+    "available": false,
+    "tokenizer": {
+      "tiktoken_encoding": "Other"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 0.2,
+      "output_per_1m": 1.15
+    }
+  },
+  {
+    "id": "x-ai/grok-4.5",
+    "display_name": "Grok 4.5",
     "subscription_tier": "plus",
     "available": true,
     "tokenizer": {
@@ -350,310 +350,17 @@
     }
   },
   {
-    "id": "nvidia/nemotron-3-super-120b-a12b:free",
-    "display_name": "Nemotron 3 Super",
-    "subscription_tier": "free",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0,
-      "output_per_1m": 0
-    }
-  },
-  {
-    "id": "moonshotai/kimi-k2-thinking",
-    "display_name": "Kimi K2",
-    "subscription_tier": "free",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.4,
-      "output_per_1m": 1.75
-    }
-  },
-  {
-    "id": "moonshotai/kimi-k2.5",
-    "display_name": "Kimi K2.5",
-    "subscription_tier": "basic",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.6,
-      "output_per_1m": 3
-    }
-  },
-  {
-    "id": "moonshotai/kimi-k2.6",
-    "display_name": "Kimi K2.6",
+    "id": "z-ai/glm-5.2",
+    "display_name": "GLM 5.2",
     "subscription_tier": "basic",
     "available": true,
     "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
+      "tiktoken_encoding": "Other"
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 0.75,
-      "output_per_1m": 3.5
-    }
-  },
-  {
-    "id": "deepseek/deepseek-v3.2",
-    "display_name": "DeepSeek V3.2",
-    "subscription_tier": "basic",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.252,
-      "output_per_1m": 0.378
-    }
-  },
-  {
-    "id": "deepseek/deepseek-v4-pro",
-    "display_name": "DeepSeek V4 Pro",
-    "subscription_tier": "plus",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.435,
-      "output_per_1m": 0.87
-    }
-  },
-  {
-    "id": "deepseek/deepseek-v4-flash",
-    "display_name": "DeepSeek V4 Flash",
-    "subscription_tier": "basic",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.14,
-      "output_per_1m": 0.28
-    }
-  },
-  {
-    "id": "minimax/minimax-m2.5",
-    "display_name": "Minimax M2.5",
-    "subscription_tier": "basic",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.29,
-      "output_per_1m": 1.25
-    }
-  },
-  {
-    "id": "minimax/minimax-m2.7",
-    "display_name": "Minimax M2.7",
-    "subscription_tier": "basic",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.3,
-      "output_per_1m": 1.2
-    }
-  },
-  {
-    "id": "qwen/qwen3.5-35b-a3b",
-    "display_name": "Qwen 3.5 35B A3B",
-    "subscription_tier": "basic",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.226,
-      "output_per_1m": 1.8
-    }
-  },
-  {
-    "id": "qwen/qwen3.5-397b-a17b",
-    "display_name": "Qwen 3.5 397B A17B",
-    "subscription_tier": "plus",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.55,
-      "output_per_1m": 3.5
-    }
-  },
-  {
-    "id": "qwen/qwen3.6-plus",
-    "display_name": "Qwen 3.6 Plus",
-    "subscription_tier": "plus",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.325,
-      "output_per_1m": 1.95
-    }
-  },
-  {
-    "id": "z-ai/glm-4.7",
-    "display_name": "GLM 4.7",
-    "subscription_tier": "basic",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.4,
-      "output_per_1m": 1.5
-    }
-  },
-  {
-    "id": "z-ai/glm-5",
-    "display_name": "GLM 5",
-    "subscription_tier": "basic",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 1,
-      "output_per_1m": 3.2
-    }
-  },
-  {
-    "id": "z-ai/glm-5.1",
-    "display_name": "GLM 5.1",
-    "subscription_tier": "basic",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 1.05,
-      "output_per_1m": 3.5
-    }
-  },
-  {
-    "id": "z-ai/glm-4.7-flash",
-    "display_name": "GLM 4.7 Flash",
-    "subscription_tier": "free",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.07,
-      "output_per_1m": 0.4
-    }
-  },
-  {
-    "id": "arcee-ai/trinity-large-preview:free",
-    "display_name": "Trinity Large Preview",
-    "subscription_tier": "free",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0,
-      "output_per_1m": 0
-    }
-  },
-  {
-    "id": "openrouter/free",
-    "display_name": "Gratis",
-    "subscription_tier": "free",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0,
-      "output_per_1m": 0
-    }
-  },
-  {
-    "id": "stepfun/step-3.5-flash:free",
-    "display_name": "Step 3.5 Flash",
-    "subscription_tier": "free",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0,
-      "output_per_1m": 0
-    }
-  },
-  {
-    "id": "inception/mercury-2:nitro",
-    "display_name": "Mercury 2",
-    "subscription_tier": "basic",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.25,
-      "output_per_1m": 0.75
-    }
-  },
-  {
-    "id": "xiaomi/mimo-v2.5-pro",
-    "display_name": "Mimo V2.5 Pro",
-    "subscription_tier": "plus",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 1,
-      "output_per_1m": 3
-    }
-  },{
-    "id": "xiaomi/mimo-v2.5",
-    "display_name": "Mimo V2.5",
-    "subscription_tier": "basic",
-    "available": true,
-    "tokenizer": {
-      "tiktoken_encoding": "cl100k_base"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.4,
-      "output_per_1m": 2
+      "input_per_1m": 0.7686,
+      "output_per_1m": 2.4156
     }
   }
 ]

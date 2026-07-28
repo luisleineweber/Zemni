@@ -62,6 +62,28 @@ function getModelDescription(modelId: string): string {
     "z-ai/glm-4.7-flash": "Rapid response model optimized for quick answers",
     "arcee-ai/trinity-large-preview:free":
       "Community model available at no cost",
+    "openrouter/free": "Routes each request to a currently available free model",
+    "openai/gpt-oss-20b:free": "Open-source 20B model available at no cost",
+    "google/gemma-4-31b-it:free": "Open model from Google available at no cost",
+    "inclusionai/ling-3.0-flash:free": "Fast community model available at no cost",
+    "x-ai/grok-4.5": "Fast general-purpose model with strong knowledge coverage",
+    "stepfun/step-3.7-flash": "Fast reasoning model with generous context support",
+    "openai/gpt-5.6-luna": "Efficient GPT-5.6 variant for high-volume generations",
+    "google/gemini-3.6-flash": "Latest fast Gemini model for multimodal document work",
+    "google/gemini-3.5-flash-lite": "Low-latency Gemini model for cost-sensitive tasks",
+    "anthropic/claude-haiku-4.5": "Fast Claude model for concise, reliable generations",
+    "moonshotai/kimi-k3": "Long-context model with strong reasoning performance",
+    "z-ai/glm-5.2": "Multilingual model with strong reasoning and tool support",
+    "minimax/minimax-m3": "Efficient general-purpose model with long context",
+    "qwen/qwen3.7-flash": "Very low-cost model optimized for high-throughput work",
+    "mistralai/mistral-medium-3-5": "Balanced Mistral model for quality and speed",
+    "openai/gpt-5.6-terra": "Balanced GPT-5.6 model for most generation tasks",
+    "anthropic/claude-sonnet-5": "Balanced Claude model for thoughtful analysis",
+    "google/gemini-3.5-flash": "High-quality Gemini model for complex multimodal work",
+    "qwen/qwen3.7-plus": "Higher-quality Qwen model with long-context support",
+    "openai/gpt-5.6-sol": "Flagship GPT-5.6 model for the most demanding tasks",
+    "anthropic/claude-opus-5": "Most capable Claude model for complex reasoning",
+    "qwen/qwen3.7-max": "Frontier Qwen model for complex long-context tasks",
   };
 
   return (

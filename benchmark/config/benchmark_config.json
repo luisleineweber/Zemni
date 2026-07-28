@@ -1,17 +1,17 @@
 {
   "judge_models": [
-    "z-ai/glm-5",
-    "minimax/minimax-m2.5",
-    "deepseek/deepseek-v3.2",
-    "google/gemini-3-flash-preview",
-    "x-ai/grok-4.1-fast"
+    "z-ai/glm-5.2",
+    "minimax/minimax-m3",
+    "deepseek/deepseek-v4-flash",
+    "google/gemini-3.6-flash",
+    "x-ai/grok-4.5"
   ],
   "free_generation_models": [
-    "openai/gpt-oss-120b",
-    "x-ai/grok-4.1-fast",
-    "arcee-ai/trinity-large-preview:free",
-    "stepfun/step-3.5-flash:free",
-    "openrouter/aurora-alpha"
+    "openai/gpt-oss-20b:free",
+    "google/gemma-4-31b-it:free",
+    "inclusionai/ling-3.0-flash:free",
+    "stepfun/step-3.7-flash",
+    "openrouter/free"
   ],
   "concurrency_limit": 30,
   "max_retries": 2,

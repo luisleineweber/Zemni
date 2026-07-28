@@ -38,6 +38,8 @@ const OPENROUTER_ROUTED_PROVIDERS = new Set([
   "arcee-ai",
   "inception",
   "bytedance-seed",
+  "inclusionai",
+  "poolside",
 ]);
 
 
@@ -51,6 +53,12 @@ export function getProviderFromModelId(modelId: string): ApiProvider | null {
 
   const parts = modelId.split("/");
   if (parts.length < 2) return null;
+
+  // OpenRouter variant selectors (for example :free) are not direct
+  // provider model IDs and must stay on the OpenRouter route.
+  if (parts.slice(1).some((part) => part.includes(":"))) {
+    return "openrouter";
+  }
 
   const provider = parts[0].toLowerCase() as any;
 
@@ -104,10 +112,14 @@ function mapModelName(modelId: string, provider: ApiProvider): string {
     anthropic: {
       "claude-sonnet-4.5": "claude-sonnet-4-5",
       "claude-opus-4.5": "claude-opus-4-5",
+      "claude-haiku-4.5": "claude-haiku-4-5",
     },
     openai: {
       "gpt-5.5": "gpt-5.5",
       "gpt-5.4": "gpt-5.4-2026-03-05",
+      "gpt-5.6-sol": "gpt-5.6-sol",
+      "gpt-5.6-terra": "gpt-5.6-terra",
+      "gpt-5.6-luna": "gpt-5.6-luna",
       "gpt-5.2-chat": "gpt-5.2-chat-latest",
       "gpt-5.2": "gpt-5.2-2025-12-11",
       "gpt-5.1": "gpt-5.1-2025-11-13",
@@ -119,6 +131,9 @@ function mapModelName(modelId: string, provider: ApiProvider): string {
     google: {
       "gemini-3-flash-preview": "gemini-3-flash-preview",
       "gemini-3-pro-preview": "gemini-3-pro-preview",
+      "gemini-3.6-flash": "gemini-3.6-flash",
+      "gemini-3.5-flash-lite": "gemini-3.5-flash-lite",
+      "gemini-3.5-flash": "gemini-3.5-flash",
     },
     openrouter: {
       // OpenRouter uses the same names as OpenRouter (no mapping needed)
