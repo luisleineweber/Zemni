@@ -60,6 +60,11 @@ CLAUDE.md
 .agents/
 .claude/
 
+# Local agent skill installations
+.agent/
+.agents/
+.claude/
+
 # Local-only scratch/data (keep ignored)
 data/
 tasks/
