@@ -61,6 +61,8 @@ const OPENROUTER_ROUTED_PROVIDERS = new Set([
   "arcee-ai",
   "inception",
   "bytedance-seed",
+  "inclusionai",
+  "poolside",
 ]);
 
 const cloneUserContext = (context: UserContext): UserContext => ({
@@ -281,6 +283,12 @@ function getProviderFromModelId(modelId: string): ApiProvider | null {
 
   const parts = modelId.split("/");
   if (parts.length < 2) return null;
+
+  // OpenRouter variant selectors (for example :free) are not direct
+  // provider model IDs and must stay on the OpenRouter route.
+  if (parts.slice(1).some((part) => part.includes(":"))) {
+    return "openrouter";
+  }
   
   const provider = parts[0].toLowerCase();
   

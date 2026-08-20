@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { loadModels } from "@/lib/models";
-import { getModelAvailability, type ApiProvider } from "@/lib/model-availability";
+import { getModelAvailability, isSubscriptionTiersEnabled, type ApiProvider } from "@/lib/model-availability";
 import { api } from "@/convex/_generated/api";
 import { getConvexClient } from "@/lib/convex-server";
 
@@ -110,9 +110,13 @@ const getCurrentUserContext = async (): Promise<CurrentUserContext> => {
  */
 export async function GET() {
   const models = await loadModels();
+  const tiersEnabled = isSubscriptionTiersEnabled();
 
-  // Get current user's tier and API keys
-  const { userTier, apiKeyProviders } = await getCurrentUserContext();
+  // No subscription filtering means user context cannot change model availability.
+  // Avoid the Clerk + Convex roundtrip on the default path.
+  const { userTier, apiKeyProviders } = tiersEnabled
+    ? await getCurrentUserContext()
+    : { userTier: null, apiKeyProviders: [] as ApiProvider[] };
 
   const mappedModels = models.map((model) => {
     // Check full model availability (subscription + API keys)
@@ -145,7 +149,13 @@ export async function GET() {
     };
   });
 
-  return NextResponse.json({
+  const response = NextResponse.json({
     models: mappedModels
   });
+
+  if (!tiersEnabled) {
+    response.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+  }
+
+  return response;
 }

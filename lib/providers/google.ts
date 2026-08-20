@@ -13,6 +13,13 @@ export function createGoogleProvider(apiKey: string) {
     return parts.length > 1 ? parts[1] : fullModelId;
   }
 
+  // Gemini 3.5/3.6 deprecate sampling controls such as temperature.
+  // Keep legacy Gemini models compatible while omitting the deprecated field
+  // for the current stable models.
+  function supportsSamplingParameters(modelId: string): boolean {
+    return !/^gemini-3\.(5|6)-/.test(getModelId(modelId));
+  }
+
 
   return {
     async generateText(
@@ -21,12 +28,15 @@ export function createGoogleProvider(apiKey: string) {
       options: { maxTokens?: number; temperature?: number; maxRetries?: number; signal?: AbortSignal } = {}
     ): Promise<ProviderResult> {
       const model = google(getModelId(modelId));
+      const samplingOptions = supportsSamplingParameters(modelId)
+        ? { temperature: options.temperature }
+        : {};
 
       const result = await generateText({
         model: model as any,
         messages: messages as any,
         maxTokens: options.maxTokens,
-        temperature: options.temperature,
+        ...samplingOptions,
         maxRetries: options.maxRetries,
         abortSignal: options.signal,
       });
@@ -44,12 +54,15 @@ export function createGoogleProvider(apiKey: string) {
       options: { maxTokens?: number; temperature?: number; signal?: AbortSignal } = {}
     ): Promise<{ textStream: AsyncIterable<string>; getUsage: () => Promise<ProviderResult> }> {
       const model = google(getModelId(modelId));
+      const samplingOptions = supportsSamplingParameters(modelId)
+        ? { temperature: options.temperature }
+        : {};
 
       const stream = await streamText({
         model: model as any,
         messages: messages as any,
         maxTokens: options.maxTokens,
-        temperature: options.temperature,
+        ...samplingOptions,
         abortSignal: options.signal,
       });
 

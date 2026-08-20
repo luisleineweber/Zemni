@@ -9,7 +9,7 @@ export interface ModelAvailability {
   isAvailable: boolean;
   isCoveredBySubscription: boolean;
   requiresOwnKey: boolean;
-  reason: "subscription" | "api_key" | "locked";
+  reason: "subscription" | "api_key" | "locked" | "system";
 }
 
 const OPENROUTER_ONLY_MODEL_IDS = new Set([
@@ -36,6 +36,8 @@ const OPENROUTER_ROUTED_PROVIDERS = new Set([
   "arcee-ai",
   "inception",
   "bytedance-seed",
+  "inclusionai",
+  "poolside",
 ]);
 
 /**
@@ -49,6 +51,12 @@ export function getProviderFromModelId(modelId: string): ApiProvider | null {
 
   const parts = modelId.split("/");
   if (parts.length < 2) return null;
+
+  // Variant suffixes such as :free and :thinking are OpenRouter routing
+  // selectors, not direct provider model IDs.
+  if (parts.slice(1).some((part) => part.includes(":"))) {
+    return "openrouter";
+  }
   
   const provider = parts[0].toLowerCase();
   
@@ -75,6 +83,11 @@ function checkModelTierAvailability(
   modelTier: string | undefined,
   userTier: string | null
 ): boolean {
+  // Until billing is enabled, tier metadata is descriptive only.
+  if (!isSubscriptionTiersEnabled()) {
+    return true;
+  }
+
   // If model has no tier, make it available (fallback)
   if (!modelTier) {
     return true;
@@ -156,6 +169,16 @@ export function getModelAvailability(
 ): ModelAvailability {
   const modelId = model.id || model.openrouterId || "";
   const modelTier = model.subscriptionTier;
+
+  // In the pre-billing mode, the configured system key covers every active model.
+  if (!isSubscriptionTiersEnabled()) {
+    return {
+      isAvailable: true,
+      isCoveredBySubscription: false,
+      requiresOwnKey: false,
+      reason: "system",
+    };
+  }
   
   // Check subscription-based availability
   const isAvailableBySubscription = checkModelTierAvailability(modelTier, userTier);

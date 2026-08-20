@@ -101,6 +101,24 @@ export const getEstimatedCompletionTime = (
     "deepseek/deepseek-v3.2": 20,
     "deepseek/deepseek-v4-pro": 28,
     "deepseek/deepseek-v4-flash": 16,
+    "openai/gpt-5.6-sol": 45,
+    "openai/gpt-5.6-terra": 35,
+    "openai/gpt-5.6-luna": 25,
+    "anthropic/claude-opus-5": 75,
+    "anthropic/claude-sonnet-5": 45,
+    "anthropic/claude-haiku-4.5": 25,
+    "google/gemini-3.6-flash": 35,
+    "google/gemini-3.5-flash": 35,
+    "google/gemini-3.5-flash-lite": 20,
+    "x-ai/grok-4.5": 30,
+    "moonshotai/kimi-k3": 45,
+    "z-ai/glm-5.2": 35,
+    "minimax/minimax-m3": 25,
+    "qwen/qwen3.7-flash": 25,
+    "qwen/qwen3.7-plus": 30,
+    "qwen/qwen3.7-max": 40,
+    "mistralai/mistral-medium-3-5": 30,
+    "stepfun/step-3.7-flash": 25,
   };
 
   const baseTime = baseEstimates[modelId] || 30;
@@ -157,6 +175,9 @@ export const getModelPerformanceConfig = (
     "nemotron-3-super",
     "grok-4.1-fast", // Grok models can sometimes be verbose
     "gemini-3",      // Gemini preview models might need more buffer
+    "grok-4.5",      // Grok models can sometimes be verbose
+    "gemini-3.6",    // Gemini 3.6 can spend more tokens on reasoning
+    "kimi-k3",       // Long-context reasoning model
   ];
 
   const isSlowModel = slowModelPatterns.some(pattern => modelId.includes(pattern));
