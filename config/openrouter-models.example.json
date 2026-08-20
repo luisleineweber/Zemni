@@ -42,7 +42,7 @@
     }
   },
   {
-    "id": "deepseek/deepseek-v4-flash",
+    "id": "deepseek/deepseek-v4-flash-0731",
     "display_name": "DeepSeek V4 Flash",
     "subscription_tier": "free",
     "available": true,
@@ -51,12 +51,12 @@
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 0.14,
-      "output_per_1m": 0.28
+      "input_per_1m": 0.065,
+      "output_per_1m": 0.14
     }
   },
   {
-    "id": "deepseek/deepseek-v4-pro",
+    "id": "deepseek/deepseek-v4-pro-0813",
     "display_name": "DeepSeek V4 Pro",
     "subscription_tier": "plus",
     "available": true,
@@ -65,8 +65,8 @@
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 0.435,
-      "output_per_1m": 0.87
+      "input_per_1m": 0.66,
+      "output_per_1m": 1.98
     }
   },
   {
@@ -112,8 +112,8 @@
     }
   },
   {
-    "id": "google/gemini-3.6-flash",
-    "display_name": "Gemini 3.6 Flash",
+    "id": "google/gemini-3.7-flash",
+    "display_name": "Gemini 3.7 Flash",
     "subscription_tier": "plus",
     "available": true,
     "tokenizer": {
@@ -168,6 +168,20 @@
     }
   },
   {
+    "id": "mistralai/mistral-small-2603",
+    "display_name": "Mistral Small 4",
+    "subscription_tier": "basic",
+    "available": true,
+    "tokenizer": {
+      "tiktoken_encoding": "Mistral"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 0.15,
+      "output_per_1m": 0.6
+    }
+  },
+  {
     "id": "mistralai/mistral-medium-3-5",
     "display_name": "Mistral Medium 3.5",
     "subscription_tier": "plus",
@@ -205,8 +219,8 @@
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 0.5,
-      "output_per_1m": 3
+      "input_per_1m": 0.2,
+      "output_per_1m": 1.2
     }
   },
   {
@@ -219,8 +233,8 @@
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 5,
-      "output_per_1m": 30
+      "input_per_1m": 2.5,
+      "output_per_1m": 15
     }
   },
   {
@@ -233,8 +247,8 @@
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 1.25,
-      "output_per_1m": 7.5
+      "input_per_1m": 2,
+      "output_per_1m": 12
     }
   },
   {
@@ -294,8 +308,22 @@
     }
   },
   {
-    "id": "qwen/qwen3.7-max",
-    "display_name": "Qwen3.7 Max",
+    "id": "qwen/qwen3.8-max",
+    "display_name": "Qwen3.8 Max",
+    "subscription_tier": "pro",
+    "available": true,
+    "tokenizer": {
+      "tiktoken_encoding": "Qwen"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 2,
+      "output_per_1m": 6
+    }
+  },
+  {
+    "id": "qwen/qwen3.8-27b",
+    "display_name": "Qwen3.8 27B",
     "subscription_tier": "plus",
     "available": true,
     "tokenizer": {
@@ -303,22 +331,8 @@
     },
     "pricing": {
       "currency": "USD",
-      "input_per_1m": 1.475,
-      "output_per_1m": 4.425
-    }
-  },
-  {
-    "id": "qwen/qwen3.7-plus",
-    "display_name": "Qwen3.7 Plus",
-    "subscription_tier": "plus",
-    "available": false,
-    "tokenizer": {
-      "tiktoken_encoding": "Qwen"
-    },
-    "pricing": {
-      "currency": "USD",
-      "input_per_1m": 0.32,
-      "output_per_1m": 1.28
+      "input_per_1m": 0.4,
+      "output_per_1m": 3
     }
   },
   {
@@ -336,8 +350,8 @@
     }
   },
   {
-    "id": "x-ai/grok-4.5",
-    "display_name": "Grok 4.5",
+    "id": "x-ai/grok-4.6",
+    "display_name": "Grok 4.6",
     "subscription_tier": "plus",
     "available": true,
     "tokenizer": {
@@ -361,6 +375,20 @@
       "currency": "USD",
       "input_per_1m": 0.7686,
       "output_per_1m": 2.4156
+    }
+  },
+  {
+    "id": "z-ai/glm-5.3",
+    "display_name": "GLM 5.3",
+    "subscription_tier": "plus",
+    "available": true,
+    "tokenizer": {
+      "tiktoken_encoding": "Other"
+    },
+    "pricing": {
+      "currency": "USD",
+      "input_per_1m": 1.4,
+      "output_per_1m": 4.4
     }
   }
 ]
